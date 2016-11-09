@@ -6,3 +6,6 @@ Projeto acadêmico da cadeira de CGA, curriculo de graduação do curso de Jogos
 
 07/11/2016
 Start do projeto : basico para iniciar a opengl
+
+08/11/2016
+Funcoes para abrir arquivos glsl e comeco de objs

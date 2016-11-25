@@ -15,7 +15,7 @@ using namespace std;
 #include <assert.h>
 
 //dfine do mesh
-#define MESH_FILE "casa.obj"
+#define MESH_FILE "monkey2.obj"
 
 /* copia o shader para um plano de arquivo de texto pra array de char */
 bool AbrirArquivo(const char* file_name, char* shader_str, int max_len) {

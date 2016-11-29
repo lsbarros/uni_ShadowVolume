@@ -93,8 +93,10 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-//#include "ogldev_util.h"
-#include "ogldev_math_3d.h"
+#include "Utilidades.h"
+#include "glm/glm.hpp"
+
+using namespace std;
 
 //int do VBO
 GLuint VBO;
@@ -164,10 +166,10 @@ static void CreateVertexBuffer()
 
 	///#desenhar triangulo
 	//desenhar um triangulo
-	Vector3f Vertices[3];
-	Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
-	Vertices[1] = Vector3f(1.0f, -1.0f, 0.0f);
-	Vertices[2] = Vector3f(0.0f, 1.0f, 0.0f);
+	glm::vec3 Vertices[3];
+	Vertices[0] = glm::vec3(-1.0f, -1.0f, 0.0f);
+	Vertices[1] = glm::vec3(1.0f, -1.0f, 0.0f);
+	Vertices[2] = glm::vec3(0.0f, 1.0f, 0.0f);
 
 
 	//alocamos um int globalmente para manusear o VBO
@@ -243,10 +245,10 @@ static void CompileShaders()
 	string vs, fs;
 
 	//funcao para ler os arquivos
-	if (!ReadFile(pVSFileName, vs)) {
+	if (!LerArquivo(pVSFileName, vs)) {
 		exit(1);
 	};
-	if (!ReadFile(pFSFileName, fs)) {
+	if (!LerArquivo(pFSFileName, fs)) {
 		exit(1);
 	};
 
@@ -330,32 +332,3 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-
-void Pipeline::InitPerspectiveProj(Matrix4f& m) const>
-{
-	const float ar = m_persProj.Width / m_persProj.Height;
-	const float zNear = m_persProj.zNear;
-	const float zFar = m_persProj.zFar;
-	const float zRange = zNear - zFar;
-	const float tanHalfFOV = tanf(ToRadian(m_persProj.FOV / 2.0));
-
-	m.m[0][0] = 1.0f / (tanHalfFOV * ar);
-	m.m[0][1] = 0.0f;
-	m.m[0][2] = 0.0f;
-	m.m[0][3] = 0.0f;
-
-	m.m[1][0] = 0.0f;
-	m.m[1][1] = 1.0f / tanHalfFOV;
-	m.m[1][2] = 0.0f;
-	m.m[1][3] = 0.0f;
-
-	m.m[2][0] = 0.0f;
-	m.m[2][1] = 0.0f;
-	m.m[2][2] = (-zNear - zFar) / zRange;
-	m.m[2][3] = 2.0f * zFar * zNear / zRange;
-
-	m.m[3][0] = 0.0f;
-	m.m[3][1] = 0.0f;
-	m.m[3][2] = 1.0f;
-	m.m[3][3] = 0.0f;
-}

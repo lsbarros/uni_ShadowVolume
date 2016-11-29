@@ -9,3 +9,6 @@ Start do projeto : basico para iniciar a opengl
 
 08/11/2016
 Funcoes para abrir arquivos glsl e comeco de objs
+
+28/11/2016
+Mudanca na estrutura

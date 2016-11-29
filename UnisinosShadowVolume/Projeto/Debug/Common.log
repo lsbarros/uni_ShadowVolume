@@ -1,0 +1,58 @@
+﻿Build started 29/11/2016 18:29:16.
+     1>Project "E:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\Common.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         E:\Visual Studio 2013\VC\bin\CL.exe /c /IE:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\\..\..\Include /IE:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\\..\..\Include\assimp /I"E:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\\..\..\Include\ImageMagick-6" /IE:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\\..\..\Include\ATB /IC:\VulkanSDK\1.0.30.0\Include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\Common\camera.cpp ..\..\Common\cubemap_texture.cpp ..\..\Common\glut_backend.cpp ..\..\Common\io_buffer.cpp ..\..\Common\math_3d.cpp ..\..\Common\ogldev_app.cpp ..\..\Common\ogldev_atb.cpp ..\..\Common\ogldev_backend.cpp ..\..\Common\ogldev_basic_lighting.cpp ..\..\Common\ogldev_basic_mesh.cpp ..\..\Common\ogldev_glfw_backend.cpp ..\..\Common\ogldev_shadow_map_fbo.cpp ..\..\Common\ogldev_skinned_mesh.cpp ..\..\Common\ogldev_texture.cpp ..\..\Common\ogldev_util.cpp ..\..\Common\ogldev_vulkan.cpp ..\..\Common\ogldev_vulkan_core.cpp ..\..\Common\ogldev_win32_control.cpp ..\..\Common\ogldev_xcb_control.cpp ..\..\Common\pipeline.cpp ..\..\Common\random_texture.cpp ..\..\Common\technique.cpp
+         technique.cpp
+         random_texture.cpp
+         pipeline.cpp
+         ogldev_xcb_control.cpp
+         ogldev_win32_control.cpp
+         ogldev_vulkan_core.cpp
+         ogldev_vulkan.cpp
+         ogldev_util.cpp
+         ogldev_texture.cpp
+         ogldev_skinned_mesh.cpp
+         ogldev_shadow_map_fbo.cpp
+         ogldev_glfw_backend.cpp
+         ogldev_basic_mesh.cpp
+         ogldev_basic_lighting.cpp
+         ogldev_backend.cpp
+         ogldev_atb.cpp
+         ogldev_app.cpp
+         math_3d.cpp
+         io_buffer.cpp
+         glut_backend.cpp
+         Generating Code...
+         Compiling...
+         cubemap_texture.cpp
+         camera.cpp
+         Generating Code...
+       Lib:
+         E:\Visual Studio 2013\VC\bin\Lib.exe /OUT:"E:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\Debug\Common.lib" /NOLOGO Debug\camera.obj
+         Debug\cubemap_texture.obj
+         Debug\glut_backend.obj
+         Debug\io_buffer.obj
+         Debug\math_3d.obj
+         Debug\ogldev_app.obj
+         Debug\ogldev_atb.obj
+         Debug\ogldev_backend.obj
+         Debug\ogldev_basic_lighting.obj
+         Debug\ogldev_basic_mesh.obj
+         Debug\ogldev_glfw_backend.obj
+         Debug\ogldev_shadow_map_fbo.obj
+         Debug\ogldev_skinned_mesh.obj
+         Debug\ogldev_texture.obj
+         Debug\ogldev_util.obj
+         Debug\ogldev_vulkan.obj
+         Debug\ogldev_vulkan_core.obj
+         Debug\ogldev_win32_control.obj
+         Debug\ogldev_xcb_control.obj
+         Debug\pipeline.obj
+         Debug\random_texture.obj
+         Debug\technique.obj
+         Common.vcxproj -> E:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\Debug\Common.lib
+     1>Done Building Project "E:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\Common.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:08.99

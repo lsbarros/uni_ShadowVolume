@@ -1,9 +1,28 @@
-﻿Build started 29/11/2016 19:45:03.
+﻿Build started 29/11/2016 22:59:06.
      1>Project "E:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\Common.vcxproj" on node 2 (Build target(s)).
-     1>Lib:
-         Common.vcxproj -> E:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\Debug\Common.lib
-     1>Done Building Project "E:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\Common.vcxproj" (Build target(s)).
+     1>ClCompile:
+         E:\Visual Studio 2013\VC\bin\CL.exe /c /IE:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\\..\..\Include /IE:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\\..\..\Include\assimp /I"E:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\\..\..\Include\ImageMagick-6" /IE:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\\..\..\Include\ATB /IC:\VulkanSDK\1.0.30.0\Include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\Common\Utilidades.cpp
+         Utilidades.cpp
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix3x3.h(138): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+                 e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix3x3.h(166) : see reference to class template instantiation 'aiMatrix3x3t<TReal>' being compiled
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix3x3.h(138): error C2143: syntax error : missing ',' before '<'
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix3x3.h(157): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix3x3.h(157): error C2143: syntax error : missing ',' before '<'
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(127): error C2061: syntax error : identifier 'aiVector3t'
+                 e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(220) : see reference to class template instantiation 'aiMatrix4x4t<TReal>' being compiled
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(138): error C2061: syntax error : identifier 'aiVector3t'
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(148): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(148): error C2143: syntax error : missing ',' before '<'
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(182): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(182): error C2143: syntax error : missing ',' before '<'
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(191): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(191): error C2143: syntax error : missing ',' before '<'
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(199): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(199): error C2143: syntax error : missing ',' before '<'
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(210): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>e:\documentos\uni_shadowvolume\trunk\include\assimp\matrix4x4.h(210): error C2143: syntax error : missing ',' before '<'
+     1>Done Building Project "E:\Documentos\uni_ShadowVolume\trunk\UnisinosShadowVolume\Projeto\Common.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:00.12
+Time Elapsed 00:00:00.82

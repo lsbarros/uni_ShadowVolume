@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="ogldev_keys.h" />
+    <ClInclude Include="ogldev_lights_common.h" />
     <ClInclude Include="ogldev_math_3d.h" />
     <ClInclude Include="ogldev_pipeline.h" />
     <ClInclude Include="ogldev_util.h" />

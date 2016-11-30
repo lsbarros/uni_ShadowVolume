@@ -130,7 +130,7 @@ bool Camera::OnKeyboard(int Key)
 	}
 	else if (Key == GLFW_KEY_PAGE_DOWN)
 	{
-		m_pos.y += STEP_SCALE;
+		m_pos.y -= STEP_SCALE;
 	}
 
 	return Ret;

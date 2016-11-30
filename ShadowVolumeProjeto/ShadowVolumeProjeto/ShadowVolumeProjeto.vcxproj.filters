@@ -55,5 +55,8 @@
     <ClInclude Include="ogldev_pipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ogldev_lights_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

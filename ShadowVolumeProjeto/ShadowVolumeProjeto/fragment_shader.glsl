@@ -1,10 +1,9 @@
 #version 400
 
-in vec4 Color;
+in vec3 normal;
+in vec2 st;
+out vec4 frag_colour;
 
-out vec4 FragColor;
-
-void main()
-{
-    FragColor = Color;
+void main() {
+	frag_colour = vec4 (normal, 1.0);
 }

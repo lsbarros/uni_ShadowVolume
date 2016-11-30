@@ -1,13 +1,16 @@
 #version 400
 
-layout (location = 0) in vec3 Position;
+layout(location = 0) in vec3 vertex_position;
+layout(location = 1) in vec3 vertex_normal;
+layout(location = 2) in vec2 texture_coord;
 
-uniform mat4 gWVP;
+uniform mat4 gWVP, proj;
 
-out vec4 Color;
+out vec3 normal;
+out vec2 st;
 
-void main()
-{
-    gl_Position = gWVP * vec4(Position, 1.0);
-    Color = vec4(clamp(Position, 0.0, 1.0), 1.0);
+void main() {
+	st = texture_coord;
+	normal = vertex_normal;
+	  gl_Position = gWVP * vec4(vertex_position, 1.0);
 }

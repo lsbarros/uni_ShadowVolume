@@ -107,14 +107,11 @@ using namespace std;
 
 #include "camera.h"
 #include "ogldev_pipeline.h"
-#include "ogldev_keys.h"
+//#include "lighting_technique.h"
 
 
 #define WINDOW_WIDTH 1024
 #define WINDOW_HEIGHT 768
-
-//dfine do mesh
-#define MESH_FILE "monkey2.obj"
 
 //camera
 Camera* pGameCamera = NULL;
@@ -129,6 +126,11 @@ GLuint IBO;
 //world location
 GLuint gWVPLocation;
 
+//LightingTechnique* m_pEffect;
+//DirectionalLight m_directionalLight;
+
+#define MESH_FILE "fazenda.obj"
+#define MESH_FILEE "monkey2.obj"
 
 /* copia o shader para um plano de arquivo de texto pra array de char */
 bool AbrirArquivo(const char* file_name, char* shader_str, int max_len) {
@@ -265,7 +267,14 @@ bool load_mesh(const char* file_name, GLuint* vao, int* point_count) {
 	return true;
 }
 
-
+glm::mat4 identity_mat4() {
+	return glm::mat4(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+		);
+}
 
 static void CreateVertexBuffer()
 {
@@ -291,6 +300,7 @@ static void CreateIndexBuffer()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
 }
+
 
 
 void KeyBoard(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -340,17 +350,21 @@ int main()
 
 
 	/* load the mesh using assimp */
-	/*	GLuint monkey_vao;
+		GLuint casa_vao;
+		int casa_point_count = 0;
+		assert(load_mesh(MESH_FILE, &casa_vao, &casa_point_count));
+
+		GLuint monkey_vao;
 		int monkey_point_count = 0;
-		assert(load_mesh(MESH_FILE, &monkey_vao, &monkey_point_count));*/
+		assert(load_mesh(MESH_FILEE, &monkey_vao, &monkey_point_count));
 
 	//BUFFER DOS VERTICES
 
 	//buffer vazio para os vertices
 	//vertex buffer obj
-	//GLuint vbo = 0;
-	//	glGenBuffers(1, &vbo);
-	//bind no buffer
+	GLuint vbo = 0;
+	//glGenBuffers(1, &vbo);
+	///bind no buffer
 	//glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	//passa o tamanho do buffer - tamanho dos pontos
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
@@ -426,19 +440,17 @@ int main()
 	gWVPLocation = glGetUniformLocation(shader_executar, "gWVP");
 	assert(gWVPLocation != 0xFFFFFFFF);
 
-
+	
 	glEnable(GL_CULL_FACE); // cull face
 	glCullFace(GL_BACK); // cull back face
 	glFrontFace(GL_CW); // GL_CCW for counter clock-wise
 
+
 	//CAMERA
-
-
-
 	//pos da camera
 	pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	
+
 	gPersProjInfo.FOV = 60.0f;
 	gPersProjInfo.Height = WINDOW_HEIGHT;
 	gPersProjInfo.Width = WINDOW_WIDTH;
@@ -450,7 +462,13 @@ int main()
 	CreateIndexBuffer();
 
 
-	
+	int view_mat_location = glGetUniformLocation(shader_executar, "view");
+	glUseProgram(shader_executar);
+	glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, 0);
+	int proj_mat_location = glGetUniformLocation(shader_executar, "proj");
+	glUseProgram(shader_executar);
+	glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, 0);
+
 	//enquanto a janela estiver ativa
 	while (!glfwWindowShouldClose(janela))
 	{
@@ -473,6 +491,7 @@ int main()
 		p.SetCamera(*pGameCamera);
 		p.SetPerspectiveProj(gPersProjInfo);
 
+
 		glUniformMatrix4fv(gWVPLocation, 1, GL_TRUE, (const GLfloat*)p.GetWVPTrans());
 
 		glEnableVertexAttribArray(0);
@@ -480,9 +499,15 @@ int main()
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
-		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+		
+		//glDisableVertexAttribArray(0);
 
-		glDisableVertexAttribArray(0);
+		glBindVertexArray(casa_vao);
+		glDrawArrays(GL_TRIANGLES, 0, monkey_point_count);
+
+		glBindVertexArray(monkey_vao);
+		glDrawArrays(GL_TRIANGLES, 1, casa_point_count);
 
 		glfwPollEvents();
 

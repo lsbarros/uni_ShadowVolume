@@ -31,10 +31,10 @@
 
 using namespace std;
 
-bool ReadFile(const char* fileName, string& outFile);
+//bool ReadFile(const char* fileName, string& outFile);
 
-void OgldevError(const char* pFileName, int line, const char* pError);
-void OgldevFileError(const char* pFileName, int line, const char* pFileError);
+//void OgldevError(const char* pFileName, int line, const char* pError);
+//void OgldevFileError(const char* pFileName, int line, const char* pFileError);
 
 #define OGLDEV_ERROR(Error) OgldevError(__FILE__, __LINE__, Error);
 #define OGLDEV_FILE_ERROR(FileError) OgldevFileError(__FILE__, __LINE__, FileError);

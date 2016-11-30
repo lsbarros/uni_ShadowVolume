@@ -1,0 +1,16 @@
+﻿Build started 30/11/16 10:54:20.
+     1>Project "C:\Users\endriu\Downloads\ShadowVolumeProjeto\ShadowVolumeProjeto\ShadowVolumeProjeto\ShadowVolumeProjeto.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\common\include /I"D:\opengl-wrapper\assimp--3.0.1270-sdk\include\assimp" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
+         Main.cpp
+       Link:
+         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\endriu\Downloads\ShadowVolumeProjeto\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\common\msvc110\ assimp.lib glew32s.lib glfw3.lib glew32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\endriu\Downloads\ShadowVolumeProjeto\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\endriu\Downloads\ShadowVolumeProjeto\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.lib" /MACHINE:X86 Debug\camera.obj
+         Debug\Main.obj
+         Debug\math_3d.obj
+         Debug\pipeline.obj
+         ShadowVolumeProjeto.vcxproj -> C:\Users\endriu\Downloads\ShadowVolumeProjeto\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.exe
+     1>Done Building Project "C:\Users\endriu\Downloads\ShadowVolumeProjeto\ShadowVolumeProjeto\ShadowVolumeProjeto\ShadowVolumeProjeto.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.14

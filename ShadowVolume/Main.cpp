@@ -94,18 +94,26 @@
 #include <GL/freeglut.h>
 
 #include "Utilidades.h"
-#include "glm/glm.hpp"
 
 using namespace std;
+
+//deixar definido os valores da janela
+#define WINDOW_WIDTH 1024
+#define WINDOW_HEIGHT 768
 
 //int do VBO
 GLuint VBO;
 
+GLuint IBO;
+
 //int scale - para variavel uniform
-//GLuint gScaleLocation;
+GLuint gScaleLocation;
 
 const char* pVSFileName = "shader.vs";
 const char* pFSFileName = "shader.fs";
+
+GLuint gWorldLocation;
+ProjecaoInformacoes proj; 
 
 static void RenderSceneCB()
 {
@@ -113,11 +121,20 @@ static void RenderSceneCB()
 
 	//variaveis uniformes 
 	//diz-se que a escala e statica
-	//static float Scale = 0.0f;
-	//Scale += 0.001f;
+	static float Scale = 0.0f;
+	Scale += 0.001f;
 	//glUniform1 seta para a escala do shader este valor estatico
 	//glUniform1f(gScaleLocation, sinf(Scale));
 	//variaveis uniformes 
+
+	//Pipeline p;
+	//p.Rotate(0.0f, Scale, 0.0f);
+	//p.WorldPos(0.0f, 0.0f, 5.0f);
+	//p.SetPerspectiveProj(proj);
+
+//	glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, (const GLfloat*)p.GetWPTrans());
+
+
 
 	//posicao dos vertex que carregamos no buffer, tratado na posicao 0 pela pipeline
 	glEnableVertexAttribArray(0);
@@ -127,8 +144,13 @@ static void RenderSceneCB()
 
 	//dizemos como interpretar os dados dentro do buffer : index do atributo, numero de componentes (X,Y,Z) = 3, tipo de dado de cada componente
 	//'stride': numero de bytes entre instancias do atributo no buffer : quando tem apenas 1 atributo, passa-se 0, se nao passa-se o tamanho dos dados
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+	//para projecao
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+
+	glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
 	///#desenhar ponto
 	//desenhar a geometria: 
@@ -136,7 +158,7 @@ static void RenderSceneCB()
 
 	///#desenhar triangulo
 	//em vez de passar 1, passa-se 3, extendemos o array para conter 3 vertices	
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glDrawArrays(GL_TRIANGLES, 0, 3);
 
 
 	//é bom desabilitar os atributos quando nao usados diretamente, se nao esta usando shader pode dar problemas
@@ -153,11 +175,27 @@ static void InitializeGlutCallbacks()
 
 	//parte de variaveis uniformes
 	//matenos em idle o mundo
-	//glutIdleFunc(RenderSceneCB);
+	glutIdleFunc(RenderSceneCB);
 }
 
 static void CreateVertexBuffer()
 {
+	//projecao
+	unsigned int Indices[] = { 0, 3, 1,
+		1, 3, 2,
+		2, 3, 0,
+		0, 1, 2 };
+
+
+
+	//projecao
+	glGenBuffers(1, &IBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
+
+	
+
+
 	///#desenhar ponto
 	//vertice e posicao do ponto na tela
 	//Vector3f Vertices[1];
@@ -166,21 +204,21 @@ static void CreateVertexBuffer()
 
 	///#desenhar triangulo
 	//desenhar um triangulo
-	glm::vec3 Vertices[3];
+	/*glm::vec3 Vertices[3];
 	Vertices[0] = glm::vec3(-1.0f, -1.0f, 0.0f);
 	Vertices[1] = glm::vec3(1.0f, -1.0f, 0.0f);
-	Vertices[2] = glm::vec3(0.0f, 1.0f, 0.0f);
+	Vertices[2] = glm::vec3(0.0f, 1.0f, 0.0f);*/
 
 
 	//alocamos um int globalmente para manusear o VBO
-	glGenBuffers(1, &VBO);
+	//glGenBuffers(1, &VBO);
 
 	//ligamos ao buffer o VBO e dizemos que este buffer conterá um array de vertices
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	//depois de ligar, preenchemos com dados: array de vertices, tamanho dos dados em bytes, endereco do array, - GL_STATIC_DRAW < para que nao tenha troca de conteudos
 	//GL_DYNAMIC_DRAW < para que tenha
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
 }
 
 static void AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType)
@@ -292,6 +330,11 @@ static void CompileShaders()
 	//0xFFFFFFFF - se o shader conter uma posicao no buffer, seja 0,1,2, etc... caso algum erro ocorra, ele tera a posicao -1, que é equivalente á 0xFFFFFFFF
 	//verifica se nao tenham erros sobre este shader no buffer
 	//assert(gScaleLocation != 0xFFFFFFFF);
+
+	//projecao
+	gWorldLocation = glGetUniformLocation(ShaderProgram, "gWorld");
+	assert(gWorldLocation != 0xFFFFFFFF);
+
 }
 
 int main(int argc, char** argv)
@@ -301,7 +344,7 @@ int main(int argc, char** argv)
 	//Double buffer - background e front / Color buffer
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 
-	glutInitWindowSize(1024, 768);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Projeto Shadow Volume");
 
@@ -325,6 +368,14 @@ int main(int argc, char** argv)
 
 	//compilar os shaders
 	CompileShaders();
+
+	//depois de tudo passa as infos da struct da camera
+	proj.FOV = 30.0f;
+	proj.Height = WINDOW_HEIGHT;
+	proj.Width = WINDOW_WIDTH;
+	proj.zNear = 1.0f;
+	proj.zFar = 100.0f;
+
 
 	//main loop da opengl
 	glutMainLoop();

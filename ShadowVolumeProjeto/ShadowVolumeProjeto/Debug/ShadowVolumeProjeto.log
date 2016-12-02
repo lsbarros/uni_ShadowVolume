@@ -1,17 +1,33 @@
-﻿Build started 30/11/16 13:47:50.
-     1>Project "C:\Intel\uni_ShadowVolume\trunk\ShadowVolumeProjeto\ShadowVolumeProjeto\ShadowVolumeProjeto.vcxproj" on node 2 (Build target(s)).
+﻿Build started 01/12/2016 22:44:04.
+     1>Project "E:\Documentos\uni_ShadowVolume\trunk\ShadowVolumeProjeto\ShadowVolumeProjeto\ShadowVolumeProjeto.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\common\include /I"D:\opengl-wrapper\assimp--3.0.1270-sdk\include\assimp" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
+         E:\Visual Studio 2013\VC\bin\CL.exe /c /I..\..\common\include /I"D:\opengl-wrapper\assimp--3.0.1270-sdk\include\assimp" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
          Main.cpp
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(382): warning C4305: 'argument' : truncation from 'double' to 'GLclampf'
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(584): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(588): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(592): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(596): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(600): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(604): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(609): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(617): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(623): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(629): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(635): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>e:\documentos\uni_shadowvolume\trunk\shadowvolumeprojeto\shadowvolumeprojeto\main.cpp(641): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
        Link:
-         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Intel\uni_ShadowVolume\trunk\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\common\msvc110\ assimp.lib glew32s.lib glfw3.lib glew32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Intel\uni_ShadowVolume\trunk\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Intel\uni_ShadowVolume\trunk\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.lib" /MACHINE:X86 Debug\camera.obj
+         E:\Visual Studio 2013\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Documentos\uni_ShadowVolume\trunk\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\common\msvc110\ assimp.lib glew32s.lib glfw3.lib glew32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\Documentos\uni_ShadowVolume\trunk\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Documentos\uni_ShadowVolume\trunk\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.lib" /MACHINE:X86 Debug\camera.obj
+         Debug\gl_utils.obj
          Debug\Main.obj
+         Debug\maths_funcs.obj
          Debug\math_3d.obj
+         Debug\obj_parser.obj
          Debug\pipeline.obj
-     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-         ShadowVolumeProjeto.vcxproj -> C:\Intel\uni_ShadowVolume\trunk\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.exe
-     1>Done Building Project "C:\Intel\uni_ShadowVolume\trunk\ShadowVolumeProjeto\ShadowVolumeProjeto\ShadowVolumeProjeto.vcxproj" (Build target(s)).
+         Debug\stb_image.obj
+         ShadowVolumeProjeto.vcxproj -> E:\Documentos\uni_ShadowVolume\trunk\ShadowVolumeProjeto\Debug\ShadowVolumeProjeto.exe
+     1>Done Building Project "E:\Documentos\uni_ShadowVolume\trunk\ShadowVolumeProjeto\ShadowVolumeProjeto\ShadowVolumeProjeto.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.36
+Time Elapsed 00:00:00.90

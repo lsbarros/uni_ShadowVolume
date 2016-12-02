@@ -30,12 +30,30 @@
     <ClCompile Include="pipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gl_utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="maths_funcs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="obj_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment_shader.glsl">
+    <None Include="plain.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="vertex_shader.glsl">
+    <None Include="plain.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="test_fs.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="test_vs.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
@@ -56,6 +74,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ogldev_lights_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gl_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="maths_funcs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="obj_parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

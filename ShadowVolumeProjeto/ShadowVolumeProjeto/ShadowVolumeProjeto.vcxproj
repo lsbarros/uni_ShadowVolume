@@ -72,13 +72,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="camera.cpp" />
     <ClCompile Include="gl_utils.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="maths_funcs.cpp" />
-    <ClCompile Include="math_3d.cpp" />
-    <ClCompile Include="obj_parser.cpp" />
-    <ClCompile Include="pipeline.cpp" />
     <ClCompile Include="stb_image.c" />
   </ItemGroup>
   <ItemGroup>
@@ -88,15 +84,8 @@
     <None Include="test_vs.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="camera.h" />
     <ClInclude Include="gl_utils.h" />
     <ClInclude Include="maths_funcs.h" />
-    <ClInclude Include="obj_parser.h" />
-    <ClInclude Include="ogldev_keys.h" />
-    <ClInclude Include="ogldev_lights_common.h" />
-    <ClInclude Include="ogldev_math_3d.h" />
-    <ClInclude Include="ogldev_pipeline.h" />
-    <ClInclude Include="ogldev_util.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

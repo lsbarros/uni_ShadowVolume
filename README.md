@@ -16,5 +16,6 @@ funcoes de projecao
 29/11/2016
 camera
 
-30/11/2016
-luz
+01/12/2016
+Adicao de objetos na cena
+Adicao de texturas

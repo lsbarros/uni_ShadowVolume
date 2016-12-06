@@ -113,6 +113,7 @@ gl_Position = vec4(gScale * Position.x, gScale * Position.y, Position.z, 1.0);
 #pragma region DEFINES
 
 #define MESH_FILE "suzanne.obj"
+#define MESH_FILE2 "triangulo.obj"
 #define NMAP_IMG_FILE "brickwork_normal-map.png"
 
 #define PLAIN_VS "plain.vert"
@@ -125,7 +126,7 @@ gl_Position = vec4(gScale * Position.x, gScale * Position.y, Position.z, 1.0);
 #define DEPTH_VS "depth.vert"
 #define DEPTH_FS "depth.frag"
 
-#define NUM_SPHERES 4
+#define NUM_OBJS 4
 
 #pragma endregion
 
@@ -153,6 +154,11 @@ GLint g_plain_P_loc;
 //vertex buffer obj para o ground
 GLuint VBO;
 
+int obj_point_count;
+GLuint objVAO;
+
+int obj_point_count2;
+GLuint objVAO2;
 //cont dos pontos do ground
 int g_Ground_Scene_point_count;
 //VAO do ground
@@ -189,7 +195,7 @@ GLint proj_mat_location;
 mat4 g_camera_V;
 mat4 g_camera_P;
 
-
+mat4 g_objs_Ms[NUM_OBJS];
 
 //RELACIONADOS A TEXTURA
 // array of vertex points
@@ -207,10 +213,10 @@ int g_point_count = 0;
 //strings
 using namespace std;
 
-//load mesh - funcao do antons
-bool load_mesh(const char* file_name) {
-	const aiScene* scene = aiImportFile(file_name, aiProcess_Triangulate |
-		aiProcess_CalcTangentSpace);
+//load mesh - funcao do antons const char* file_name
+/* load a mesh using the assimp library */
+bool load_mesh(const char* file_name, GLuint* vao, int* point_count) {
+	const aiScene* scene = aiImportFile(file_name, aiProcess_Triangulate);
 	if (!scene) {
 		fprintf(stderr, "ERROR: reading mesh %s\n", file_name);
 		return false;
@@ -222,79 +228,100 @@ bool load_mesh(const char* file_name) {
 	printf("  %i meshes\n", scene->mNumMeshes);
 	printf("  %i textures\n", scene->mNumTextures);
 
-	// get first mesh only
+	/* get first mesh in file only */
 	const aiMesh* mesh = scene->mMeshes[0];
 	printf("    %i vertices in mesh[0]\n", mesh->mNumVertices);
-	g_point_count = mesh->mNumVertices;
 
-	// allocate memory for vertex points
+	/* pass back number of vertex points in mesh */
+	*point_count = mesh->mNumVertices;
+
+	/* generate a VAO, using the pass-by-reference parameter that we give to the
+	function */
+	glGenVertexArrays(1, vao);
+	glBindVertexArray(*vao);
+
+	/* we really need to copy out all the data from AssImp's funny little data
+	structures into pure contiguous arrays before we copy it into data buffers
+	because assimp's texture coordinates are not really contiguous in memory.
+	i allocate some dynamic memory to do this. */
+	GLfloat* points = NULL; // array of vertex points
+	GLfloat* normals = NULL; // array of vertex normals
+	GLfloat* texcoords = NULL; // array of texture coordinates
 	if (mesh->HasPositions()) {
-		printf("mesh has positions\n");
-		g_vp = (GLfloat*)malloc(g_point_count * 3 * sizeof(GLfloat));
+		points = (GLfloat*)malloc(*point_count * 3 * sizeof (GLfloat));
+		for (int i = 0; i < *point_count; i++) {
+			const aiVector3D* vp = &(mesh->mVertices[i]);
+			points[i * 3] = (GLfloat)vp->x;
+			points[i * 3 + 1] = (GLfloat)vp->y;
+			points[i * 3 + 2] = (GLfloat)vp->z;
+		}
 	}
 	if (mesh->HasNormals()) {
-		printf("mesh has normals\n");
-		g_vn = (GLfloat*)malloc(g_point_count * 3 * sizeof(GLfloat));
+		normals = (GLfloat*)malloc(*point_count * 3 * sizeof (GLfloat));
+		for (int i = 0; i < *point_count; i++) {
+			const aiVector3D* vn = &(mesh->mNormals[i]);
+			normals[i * 3] = (GLfloat)vn->x;
+			normals[i * 3 + 1] = (GLfloat)vn->y;
+			normals[i * 3 + 2] = (GLfloat)vn->z;
+		}
 	}
 	if (mesh->HasTextureCoords(0)) {
-		printf("mesh has texture coords\n");
-		g_vt = (GLfloat*)malloc(g_point_count * 2 * sizeof(GLfloat));
+		texcoords = (GLfloat*)malloc(*point_count * 2 * sizeof (GLfloat));
+		for (int i = 0; i < *point_count; i++) {
+			const aiVector3D* vt = &(mesh->mTextureCoords[0][i]);
+			texcoords[i * 2] = (GLfloat)vt->x;
+			texcoords[i * 2 + 1] = (GLfloat)vt->y;
+		}
+	}
+
+	/* copy mesh data into VBOs */
+	if (mesh->HasPositions()) {
+		GLuint vbo;
+		glGenBuffers(1, &vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBufferData(
+			GL_ARRAY_BUFFER,
+			3 * *point_count * sizeof (GLfloat),
+			points,
+			GL_STATIC_DRAW
+			);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+		glEnableVertexAttribArray(0);
+		free(points);
+	}
+	if (mesh->HasNormals()) {
+		GLuint vbo;
+		glGenBuffers(1, &vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBufferData(
+			GL_ARRAY_BUFFER,
+			3 * *point_count * sizeof (GLfloat),
+			normals,
+			GL_STATIC_DRAW
+			);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+		glEnableVertexAttribArray(1);
+		free(normals);
+	}
+	if (mesh->HasTextureCoords(0)) {
+		GLuint vbo;
+		glGenBuffers(1, &vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBufferData(
+			GL_ARRAY_BUFFER,
+			2 * *point_count * sizeof (GLfloat),
+			texcoords,
+			GL_STATIC_DRAW
+			);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+		glEnableVertexAttribArray(2);
+		free(texcoords);
 	}
 	if (mesh->HasTangentsAndBitangents()) {
-		printf("mesh has tangents\n");
-		g_vtans = (GLfloat*)malloc(g_point_count * 4 * sizeof(GLfloat));
-	}
-
-	for (unsigned int v_i = 0; v_i < mesh->mNumVertices; v_i++) {
-		if (mesh->HasPositions()) {
-			const aiVector3D* vp = &(mesh->mVertices[v_i]);
-			g_vp[v_i * 3] = (GLfloat)vp->x;
-			g_vp[v_i * 3 + 1] = (GLfloat)vp->y;
-			g_vp[v_i * 3 + 2] = (GLfloat)vp->z;
-		}
-		if (mesh->HasNormals()) {
-			const aiVector3D* vn = &(mesh->mNormals[v_i]);
-			g_vn[v_i * 3] = (GLfloat)vn->x;
-			g_vn[v_i * 3 + 1] = (GLfloat)vn->y;
-			g_vn[v_i * 3 + 2] = (GLfloat)vn->z;
-		}
-		if (mesh->HasTextureCoords(0)) {
-			const aiVector3D* vt = &(mesh->mTextureCoords[0][v_i]);
-			g_vt[v_i * 2] = (GLfloat)vt->x;
-			g_vt[v_i * 2 + 1] = (GLfloat)vt->y;
-		}
-		if (mesh->HasTangentsAndBitangents()) {
-			const aiVector3D* tangent = &(mesh->mTangents[v_i]);
-			const aiVector3D* bitangent = &(mesh->mBitangents[v_i]);
-			const aiVector3D* normal = &(mesh->mNormals[v_i]);
-
-			// put the three vectors into my vec3 struct format for doing maths
-			vec3 t(tangent->x, tangent->y, tangent->z);
-			vec3 n(normal->x, normal->y, normal->z);
-			vec3 b(bitangent->x, bitangent->y, bitangent->z);
-			// orthogonalise and normalise the tangent so we can use it in something
-			// approximating a T,N,B inverse matrix
-			vec3 t_i = normalise(t - n * dot(n, t));
-
-			// get determinant of T,B,N 3x3 matrix by dot*cross method
-			float det = (dot(cross(n, t), b));
-			if (det < 0.0f) {
-				det = -1.0f;
-			}
-			else {
-				det = 1.0f;
-			}
-
-			// push back 4d vector for inverse tangent with determinant
-			g_vtans[v_i * 4] = t_i.v[0];
-			g_vtans[v_i * 4 + 1] = t_i.v[1];
-			g_vtans[v_i * 4 + 2] = t_i.v[2];
-			g_vtans[v_i * 4 + 3] = det;
-		}
+		// NB: could store/print tangents here
 	}
 
 	aiReleaseImport(scene);
-
 	printf("mesh loaded\n");
 
 	return true;
@@ -331,6 +358,14 @@ void Ground_Scene() {
 	glEnableVertexAttribArray(0);
 }
 
+// a posição dos objetos na cena.
+vec3 obj_pos_wor[] = {
+	vec3(-4.0, 0.0, 0.0),
+	vec3(2.0, 0.0, 3.0),
+	vec3(-2.0, 0.0, -2.0),
+	vec3(1.5, 1.0, -6.0)
+};
+
 //start
 int main() {
 
@@ -338,7 +373,7 @@ int main() {
 
 	//-------------start e glfw funcs
 	assert(start_gl());
-
+	
 	// cull face
 	glEnable(GL_CULL_FACE);
 	// enable depth-testing
@@ -360,64 +395,23 @@ int main() {
 #pragma region Texturas - Shaders
 	/////////////////////////////- PARTE DAS TEXTURAS - 
 
-	//arquivo obj
-	assert(load_mesh(MESH_FILE));
-
 	//vao
-	GLuint vao;
+	/*GLuint vao;
 	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	glBindVertexArray(vao);*/
 
 
-	GLuint points_vbo;
-	if (NULL != g_vp) {
-		glGenBuffers(1, &points_vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-		glBufferData(
-			GL_ARRAY_BUFFER, 3 * g_point_count * sizeof(GLfloat), g_vp, GL_STATIC_DRAW
-			);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-		glEnableVertexAttribArray(0);
-	}
+	//arquivo obj
+	//assert(load_mesh(MESH_FILE));
+	
+	
+	obj_point_count = 0;
+	assert(load_mesh(MESH_FILE, &objVAO, &obj_point_count));
+	
+	obj_point_count2 = 0;
+	assert(load_mesh(MESH_FILE2, &objVAO2, &obj_point_count2));
 
-	//normais vbo
-	GLuint normals_vbo;
-	if (NULL != g_vn) {
-		glGenBuffers(1, &normals_vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, normals_vbo);
-		glBufferData(
-			GL_ARRAY_BUFFER, 3 * g_point_count * sizeof(GLfloat), g_vn, GL_STATIC_DRAW
-			);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-		glEnableVertexAttribArray(1);
-	}
 
-	//coordenadas da textua vbo
-	GLuint texcoords_vbo;
-	if (NULL != g_vt) {
-		glGenBuffers(1, &texcoords_vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, texcoords_vbo);
-		glBufferData(
-			GL_ARRAY_BUFFER, 2 * g_point_count * sizeof(GLfloat), g_vt, GL_STATIC_DRAW
-			);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-		glEnableVertexAttribArray(2);
-	}
-
-	//tangentes vbo
-	GLuint tangents_vbo;
-	if (NULL != g_vtans) {
-		glGenBuffers(1, &tangents_vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, tangents_vbo);
-		glBufferData(
-			GL_ARRAY_BUFFER,
-			4 * g_point_count * sizeof(GLfloat),
-			g_vtans,
-			GL_STATIC_DRAW
-			);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, NULL);
-		glEnableVertexAttribArray(3);
-	}
 
 	//program de texturas - shaders
 	GLuint shader_programme = create_programme_from_files(
@@ -494,11 +488,16 @@ int main() {
 	//program obj
 	glUseProgram(shader_programme);
 	//matrizes e camera para o obj
-	glUniformMatrix4fv(model_mat_location, 1, GL_FALSE, identity_mat4().m);
+	//glUniformMatrix4fv(model_mat_location, 1, GL_FALSE, identity_mat4().m);
+	
 	glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, g_camera_V.m);
 	glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, g_camera_P.m);
-
-
+	
+	for (int i = 0; i < 4; i++) {
+		g_objs_Ms[i] = translate(identity_mat4(), obj_pos_wor[i]);
+	}
+	
+		
 	//chao
 	// --------------- pegar todas variaveis uniformees no vertice / glsl
 	//uniform matrix no glsl
@@ -540,6 +539,7 @@ int main() {
 	//////////////////////////////////////////////////////////// DEPOIS DE TUDO SETADO, START NO LOOP
 	while (!glfwWindowShouldClose(g_window)) {
 
+		
 
 		// atualiza os timers = precisa para uso dos teclados
 		static double previous_seconds = glfwGetTime();
@@ -550,8 +550,12 @@ int main() {
 
 
 		// wipe the drawing surface clear
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, g_gl_width, g_gl_height);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT);
+	
+
+		
 
 		/* chao */
 		glUseProgram(g_plain_sp);
@@ -559,20 +563,30 @@ int main() {
 		glBindVertexArray(g_Ground_Scene_vao);
 		glUniformMatrix4fv(g_plain_M_loc, 1, GL_FALSE, identity_mat4().m);
 		glDrawArrays(GL_TRIANGLES, 0, g_Ground_Scene_point_count);
-
+	
+	
+		
 
 		/* macaco */
 		glUseProgram(shader_programme);
-		glBindVertexArray(vao);
-		// draw points 0-3 from the currently bound VAO with current in-use shader
-		glDrawArrays(GL_TRIANGLES, 0, g_point_count);
-		glUniformMatrix4fv(matr_mat_location, 1, GL_FALSE, identity_mat4().m);
+		
+
+		glBindVertexArray(objVAO);
+		for (int i = 0; i < 4; i++)
+		{
+			glUniformMatrix4fv(model_mat_location, 1, GL_FALSE, g_objs_Ms[i].m);
+			glDrawArrays(GL_TRIANGLES, 0, obj_point_count);
+
+		}
+	
+		glBindVertexArray(objVAO2);
+		glUniformMatrix4fv(model_mat_location, 1, GL_FALSE, g_objs_Ms[0].m);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, obj_point_count2);
+
 
 
 		//atualizar eventos 
 		glfwPollEvents();
-
-
 
 		// control keys
 		bool cam_moved = false;

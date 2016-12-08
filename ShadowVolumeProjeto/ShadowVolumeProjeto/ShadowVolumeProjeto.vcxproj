@@ -78,6 +78,11 @@
     <ClCompile Include="stb_image.c" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="depth.frag" />
+    <None Include="depth.vert" />
+    <None Include="silhouette.fs" />
+    <None Include="silhouette.gs" />
+    <None Include="silhouette.vs" />
     <None Include="test_fs.glsl" />
     <None Include="plain.frag" />
     <None Include="plain.vert" />

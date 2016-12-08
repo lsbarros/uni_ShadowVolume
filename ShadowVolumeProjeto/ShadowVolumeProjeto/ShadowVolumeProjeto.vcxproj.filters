@@ -44,6 +44,21 @@
     <None Include="test_vs.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="depth.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="depth.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="silhouette.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="silhouette.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="silhouette.gs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gl_utils.h">

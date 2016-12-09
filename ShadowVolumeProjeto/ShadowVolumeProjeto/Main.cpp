@@ -19,84 +19,15 @@
 		Enquanto que, o valor uniforma nas variaveis mantem constante em todo o desenho. Provavelmente deixa mais leve para redesenhar algo que nao sera desenhado novamente.
 		Nao temos acesso direto ao conteudo dos shader e as variaveis se mantem inacessiveis.
 		Pelo que entendi tu "trava" o que tu quer que nao vai ser mudado ou para mover algo e nao ocorra erros de mudar algo de posicao enquanto translada.
-
-
-
-
-		SHADER.VS:
-
-		//----------------especifica a versao da glsl - se o compilador nao ter o suporte vai dar erro
-		#version 400
-
-		//----------------declaramos que um vertex especifico que é um Vetor de 3 floats será conhecido como "Position" no shader
-		//----------------vertex especifico: cada invocacao do shader na GPU o valor do novo vertex vindo do buffer sera substituido
-
-		//----------------layout (location = 0) : cria um binding entre o nome do atributo e o buffer do atributo, caso o vertex contenha varios parametros (posicao, normais, textura, etc)
-		//----------------o compilador saber no buffer onde esta mapeado para declarar o shader especifico
-		layout (location = 0) in vec3 Position;
-
-		//----------------pode-se criar inumeros shaders, mas apenas 1 funcao principal para executa-los em cada estagio  (VS, GS, FS)
-		void main()
-		{
-
-		//---------------- gl_Position: uma variavel construida especialmente para conter a posicao do vertex (x,y,z,w). O rasterizador procurará por esta variavel e usara na no espaço da tela
-		gl_Position = vec4(0.5 * Position.x, 0.5 * Position.y, Position.z, 1.0);
-
-		}
-
-
-		SHADER.FS:
-
-		#version 400
-
-		//---------------- usualmente a funcao do fragment shader é determinar a cor do pixel
-		//---------------- ele pode alterar ou descartar o valor em Z, que vai alterar o resultado do Z-Test
-		//---------------- Vec4 = RGBA
-		out vec4 FragColor;
-
-		void main()
-		{
-
-		//---------------- FRAMEBUFFER - cor
-		FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-
-		}
-
-
-
-
-
-		SHADER.VS COM VARIAVEIS UNIFORMES:
-		#version 330
-
-		layout (location = 0) in vec3 Position;
-
-		//---------------- daqui se tira a viariavel que nao vai mudar a escala do shader
-		uniform float gScale;
-
-		void main()
-		{
-
-		gl_Position = vec4(gScale * Position.x, gScale * Position.y, Position.z, 1.0);
-
-
-		}
-
-
-
-
-
+		
 		*/
 
 		#pragma region INCLUEDES
 
 		//essencial - INCLUDES
 		#include <GL/glew.h> 
-		//#include <glm/glm/glm.hpp>
-
 		#include <stdio.h>
 		#include <stdarg.h>
-
 		//meshs
 		#include <assimp/cimport.h>
 		#include <assimp/scene.h> 
@@ -105,7 +36,6 @@
 		#include "gl_utils.h"
 		#include "maths_funcs.h"
 		#include "stb_image.h" 
-
 		#pragma endregion 
 
 
@@ -143,8 +73,6 @@
 		int g_gl_width = 1024;
 		int g_gl_height = 768;
 		GLFWwindow* g_window = NULL;
-
-
 
 		//RELACIONADOS AO CHAO DO CENARIO
 		//program para o ground do cenario
@@ -185,7 +113,7 @@
 		//VAO do ground
 		GLuint g_Ground_Scene_vao;
 
-		//CASTERS PARA A LUZ - ainda nao funcionando / testes
+		//CASTERS PARA A LUZ - 
 		//shadow caster view matriz
 		GLint g_plain_caster_V_loc;
 		//shadow caster proj matrix
@@ -201,8 +129,7 @@
 		mat4 g_caster_V;
 		mat4 g_caster_P;
 
-
-		//RELACIONADOS AO OBJ DO CENARIO - Monkey
+		//RELACIONADOS AOS OBJS DO CENARIO 
 		//location matrix
 		GLint matr_mat_location;
 		//view matrix
@@ -244,7 +171,6 @@
 		using namespace std;
 
 		//load mesh - funcao do antons const char* file_name
-		/* load a mesh using the assimp library */
 		bool load_mesh(const char* file_name, GLuint* vao, int* point_count) {
 			const aiScene* scene = aiImportFile(file_name, aiProcess_Triangulate);
 			if (!scene) {
@@ -357,7 +283,7 @@
 			return true;
 		}
 
-		/* setup framebuffer that renders depth to a texture */
+		// framebuffer/ textura 2d da sombra
 		void init_shadow_fb() {
 			// create framebuffer
 			glGenFramebuffers(1, &g_depth_fb);
@@ -404,7 +330,7 @@
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
 
-		/* do a rendering pass writing just the depth to a texture */
+		/* cria o renderer dos objetos - sombra */
 		void render_shadow_casting() {
 			/* similar to epsilon offset */
 			/*
@@ -426,13 +352,6 @@
 			glUniformMatrix4fv(g_depth_P_loc, 1, GL_FALSE, g_caster_P.m);
 			// model matrix does nothing for the monkey - make it an identity matrix
 
-			//VAO 1
-			/*		glBindVertexArray(objVAO);
-					for (int i = 0; i < 4; i++) {
-					glUniformMatrix4fv(g_depth_M_loc, 1, GL_FALSE, g_objs_Ms[i].m);
-					glDrawArrays(GL_TRIANGLES, 0, obj_point_count);
-					}*/
-
 			//VAO 2 - arvores
 			glBindVertexArray(objVAO_Tree);
 			for (int i = 0; i < 4; i++) {
@@ -440,21 +359,21 @@
 				glDrawArrays(GL_TRIANGLES, 0, obj_point_count_Tree);
 			}
 
-			//VAO 3
+			//VAO deer
 			glBindVertexArray(objVAO_Deer);
 			for (int i = 0; i < 1; i++) {
 				glUniformMatrix4fv(g_depth_M_loc, 1, GL_FALSE, g_objs_Ms[i].m);
 				glDrawArrays(GL_TRIANGLES, 0, obj_point_count_Deer);
 			}
 
-			//VAO 4
+			//VAO bear
 			glBindVertexArray(objVAO_Bear);
 			for (int i = 0; i < 1; i++) {
 				glUniformMatrix4fv(g_depth_M_loc, 1, GL_FALSE, g_objs_Ms[i].m);
 				glDrawArrays(GL_TRIANGLES, 0, obj_point_count_Bear);
 			}
 
-			//VAO 5
+			//VAO wolf
 			glBindVertexArray(objVAO_Wolf);
 			for (int i = 0; i < 1; i++) {
 				glUniformMatrix4fv(g_depth_M_loc, 1, GL_FALSE, g_objs_Ms[i].m);
@@ -469,7 +388,7 @@
 				glDrawArrays(GL_TRIANGLES, 0, obj_point_count_Butterfly);
 				}*/
 
-			//VAO 7
+			//VAO bee
 			glBindVertexArray(objVAO_Bee);
 			for (int i = 0; i < 3; i++) {
 				glUniformMatrix4fv(g_depth_M_loc, 1, GL_FALSE, g_objs_Ms[i].m);
@@ -484,22 +403,13 @@
 		}
 
 
-		// ---------------------------------------------------------- posição dos objetos na cena.
+		// ---------------------------------------------------------- posição default dos objetos na cena.
 		vec3 obj_pos_wor[] = {
 			vec3(-4.0, 0.0, 0.0),
 			vec3(2.0, 0.0, 3.0),
 			vec3(-2.0, 0.0, -2.0),
 			vec3(1.5, 1.0, -6.0)
 		};
-
-		vec3 obj_pos_word_Deer[] = {
-			vec3(-4.0, 0.0, 0.0),
-			vec3(2.0, 0.0, 3.0),
-			vec3(-2.0, 0.0, -2.0),
-			vec3(1.5, 1.0, -6.0)
-		};
-
-
 
 		//Desenha o chao
 		void Ground_Scene() {
@@ -531,16 +441,20 @@
 			glEnableVertexAttribArray(0);
 		}
 
+
+		//posicao e rotacao da camera - usa pra "andar" no mapa e criar a sombra
 		vec3 cam_pos(5.0f, 10.0f, 12.0f);
 		versor quaternion = quat_from_axis_deg(20.0f, 0.0f, 1.0f, 0.0f);
+
+		//cria a view m pro caster de sombra
 		void create_shadow_caster() {
-			// create a view matrix for the shadow caster
+
 			vec3 light_pos(cam_pos);// 10.0f, 10.0f, 0.0f);
 			vec3 light_target(0.0f, 0.0f, 0.0f);
 			vec3 up_dir(normalise(vec3(-1.0f, 1.0f, 0.0f)));
 			g_caster_V = look_at(light_pos, light_target, up_dir);
 
-			// create a projection matrix for the shadow caster
+
 			float near = 1.0f;
 			float far = 30.0f;
 			float fov = 50.0f;
@@ -548,7 +462,7 @@
 			g_caster_P = perspective(fov, aspect, near, far);
 		}
 
-
+		//fazer em execucao a sombra dependendo da posicao da camera(luz)
 		void Sombra()
 		{
 			g_depth_sp = create_programme_from_files(DEPTH_VS, DEPTH_FS);
@@ -574,8 +488,7 @@
 			render_shadow_casting();
 		}
 
-
-
+		//apenas tira as texturas da sombra
 		void TirarSombra()
 		{
 			g_caster_P = perspective(0, 0, 0, 0);
@@ -595,66 +508,12 @@
 			}
 			render_shadow_casting();
 		}
+		
 
-
-
-
-
-		//start
-		int main() {
-
-		#pragma region Start
-
-			//-------------start e glfw funcs
-			assert(start_gl());
-
-			//init 
-			init_shadow_fb();
-
-
-
-			glEnable(GL_CULL_FACE);
-
-			// enable depth-testing
-			glEnable(GL_DEPTH_TEST);
-			// depth-testing interprets a smaller value as "closer"
-			glDepthFunc(GL_LESS);
-			// cull back face
-			glCullFace(GL_BACK);
-			// set counter-clock-wise vertex order to mean the front
-			glFrontFace(GL_CCW);
-			// grey background to help spot mistakes
-			glClearColor(0.2, 0.2, 0.2, 1.0);
-
-			glViewport(0, 0, g_gl_width, g_gl_height);
-
-		#pragma endregion
-
-			g_depth_sp = create_programme_from_files(DEPTH_VS, DEPTH_FS);
-			g_depth_M_loc = glGetUniformLocation(g_depth_sp, "M");
-			g_depth_V_loc = glGetUniformLocation(g_depth_sp, "V");
-			g_depth_P_loc = glGetUniformLocation(g_depth_sp, "P");
-
-			//sombras
-			//	create_shadow_caster();
-
-
-		#pragma region Texturas - Shaders
-			/////////////////////////////- PARTE DAS TEXTURAS - 
-
-			//vao
-			/*GLuint vao;
-			glGenVertexArrays(1, &vao);
-			glBindVertexArray(vao);*/
-
-
-			//arquivo obj
-			//assert(load_mesh(MESH_FILE));
-
-
-			//obj_point_count = 0;
-			//	assert(load_mesh(MESH_FILE, &objVAO, &obj_point_count));
-
+		GLuint shader_programme;
+		//meshs e shaders
+		void Meshs_Shaders()
+		{
 			obj_point_count_Tree = 0;
 			assert(load_mesh(MESH_FILE_TREE, &objVAO_Tree, &obj_point_count_Tree));
 
@@ -670,12 +529,6 @@
 			obj_point_count_Wolf = 0;
 			assert(load_mesh(MESH_FILE_WOLF, &objVAO_Wolf, &obj_point_count_Wolf));
 
-
-			//Butterfly
-			//obj_point_count_Butterfly = 0;
-			//assert(load_mesh(MESH_FILE_BUTTERFLY, &objVAO_Butterfly, &obj_point_count_Butterfly));
-
-
 			//Bee
 			obj_point_count_Bee = 0;
 			assert(load_mesh(MESH_FILE_BEE, &objVAO_Bee, &obj_point_count_Bee));
@@ -683,38 +536,48 @@
 
 
 			//program de texturas - shaders
-			GLuint shader_programme = create_programme_from_files(
+			shader_programme = create_programme_from_files(
 				VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE);
 
-
-			// load normal map para textura
-			GLuint nmap_tex;
-			assert(load_texture(NMAP_IMG_FILE, &nmap_tex));
-			// load texture
-			GLuint tex_diff, tex_spec, tex_amb, tex_emiss;
-			glActiveTexture(GL_TEXTURE0);
-			assert(load_texture("brickwork_normal-map.png", &tex_diff));
-			glActiveTexture(GL_TEXTURE1);
-			assert(load_texture("brickwork_normal-map.png", &tex_spec));
-			glActiveTexture(GL_TEXTURE2);
-			assert(load_texture("brickwork_normal-map.png", &tex_amb));
-			glActiveTexture(GL_TEXTURE3);
-			assert(load_texture("brickwork_normal-map.png", &tex_emiss));
-
-
-			//-------------------------------------------------------------------------------------------FORMAS
 			//gramado
 			Ground_Scene();
 
-			//-------------SHaders
 			//shaders do gramado
 			g_plain_sp = create_programme_from_files(PLAIN_VS, PLAIN_FS);
+		}
 
-		#pragma endregion
 
 
-		#pragma region Camera
-			//-----------------------------------------------------------------------------------------CAMERA
+		//start
+		int main() {
+
+			//-------------start e glfw funcs
+			assert(start_gl());
+
+			//init 
+			init_shadow_fb();
+
+			glEnable(GL_CULL_FACE);
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LESS);
+			glCullFace(GL_BACK);
+			glFrontFace(GL_CCW);
+			glClearColor(0.2, 0.2, 0.2, 1.0);
+
+			glViewport(0, 0, g_gl_width, g_gl_height);
+
+			g_depth_sp = create_programme_from_files(DEPTH_VS, DEPTH_FS);
+			g_depth_M_loc = glGetUniformLocation(g_depth_sp, "M");
+			g_depth_V_loc = glGetUniformLocation(g_depth_sp, "V");
+			g_depth_P_loc = glGetUniformLocation(g_depth_sp, "P");
+
+			//meshs e shaders
+			Meshs_Shaders();
+			
+
+			//camera e rendering
+			/*                                                                   CAMERA                            */
+
 			// proximidade da camera
 			float near = 0.1f;
 
@@ -751,12 +614,7 @@
 			//view
 			g_camera_V = inverse(R) * inverse(T);
 
-		#pragma endregion
-
-
-		#pragma region Rendering
-			//---------------Defaults do rendering
-
+			/*                                                                   Defaults do rendering                            */
 
 			//model matrix - obj
 			int model_mat_location = glGetUniformLocation(shader_programme, "model");
@@ -767,15 +625,9 @@
 
 			//program obj
 			glUseProgram(shader_programme);
-			//matrizes e camera para o obj
-			//glUniformMatrix4fv(model_mat_location, 1, GL_FALSE, identity_mat4().m);
 
 			glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, g_camera_V.m);
 			glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, g_camera_P.m);
-
-			/*	for (int i = 0; i < 4; i++) {
-					g_objs_Ms[i] = translate(identity_mat4(), obj_pos_wor[i]);
-					}*/
 
 
 			//chao
@@ -800,7 +652,6 @@
 
 
 
-
 			//shader para o chao
 			glUseProgram(g_plain_sp);
 			//cameras
@@ -814,16 +665,12 @@
 			for (int i = 0; i < NUM_OBJS; i++) {
 				g_objs_Ms[i] = translate(identity_mat4(), obj_pos_wor[i]);
 			}
+		
 
 
-		#pragma endregion 
-
-		#pragma region Loop
-			//////////////////////////////////////////////////////////// DEPOIS DE TUDO SETADO, START NO LOOP
+			/// DEPOIS DE TUDO SETADO, START NO LOOP
 			while (!glfwWindowShouldClose(g_window)) {
-
-
-
+				
 				// atualiza os timers = precisa para uso dos teclados
 				static double previous_seconds = glfwGetTime();
 				double current_seconds = glfwGetTime();
@@ -832,17 +679,14 @@
 				_update_fps_counter(g_window);
 
 
-
+				//cast da sombra
 				render_shadow_casting();
-
 
 
 				// wipe the drawing surface clear
 				glViewport(0, 0, g_gl_width, g_gl_height);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				glClear(GL_DEPTH_BUFFER_BIT);
-
-
 
 
 				/* chao */
@@ -859,20 +703,6 @@
 
 
 
-
-				/* macaco */
-				//glUseProgram(shader_programme);
-
-				//glActiveTexture(GL_TEXTURE0);
-				//glBindTexture(GL_TEXTURE_2D, g_depth_fb_tex);
-
-				/*glBindVertexArray(objVAO);
-				for (int i = 0; i < 4; i++)
-				{
-				glUniformMatrix4fv(model_mat_location, 1, GL_FALSE, g_objs_Ms[i].m);
-				glDrawArrays(GL_TRIANGLES, 0, obj_point_count);
-
-				}*/
 
 				//arvores
 				glUniform3f(g_plain_colour_loc, 0.2, 0.6, 0.1);
@@ -1037,7 +867,7 @@
 				// put the stuff we've been drawing onto the display
 				glfwSwapBuffers(g_window);
 			}
-		#pragma endregion
+	
 
 			// close GL context and any other GLFW resources
 			glfwTerminate();

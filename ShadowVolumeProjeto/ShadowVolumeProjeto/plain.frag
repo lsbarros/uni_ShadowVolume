@@ -1,8 +1,8 @@
 #version 410
 
-// vertex points in light coordinate space
+// vertex das coordenadas da luz
 in vec4 st_shadow;
-// the depth map
+// depth map
 uniform sampler2D depth_map;
 uniform vec3 colour;
 uniform float shad_resolution = 2048.0;
